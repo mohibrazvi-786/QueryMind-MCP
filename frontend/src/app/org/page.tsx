@@ -1,7 +1,12 @@
 "use client"
 
 import { Layout } from "@/components/Layout"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default function OrgPage() {
   return (
@@ -20,12 +25,27 @@ export default function OrgPage() {
             <CardTitle>Roles</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
-              <li><strong>Platform Administrator</strong> — manage users, organizations, configuration</li>
-              <li><strong>Organization Administrator</strong> — manage members, roles, connections, reports</li>
-              <li><strong>Database Analyst</strong> — discover metadata, generate/validate SQL, analyze performance</li>
-              <li><strong>Read-only Viewer</strong> — view schema docs and reports; no query execution</li>
-              <li><strong>Service Account</strong> — machine-to-machine MCP access, scoped permissions</li>
+            <ul className="text-sm text-muted-foreground space-y-3 list-disc pl-5">
+              <li>
+                <strong>Platform Administrator</strong> — manage users,
+                organizations, configuration
+              </li>
+              <li>
+                <strong>Organization Administrator</strong> — manage members,
+                roles, connections, reports
+              </li>
+              <li>
+                <strong>Database Analyst</strong> — discover metadata,
+                generate/validate SQL, analyze performance
+              </li>
+              <li>
+                <strong>Read-only Viewer</strong> — view schema docs and
+                reports; no query execution
+              </li>
+              <li>
+                <strong>Service Account</strong> — machine-to-machine MCP
+                access, scoped permissions
+              </li>
             </ul>
           </CardContent>
         </Card>

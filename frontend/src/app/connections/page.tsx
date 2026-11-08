@@ -1,9 +1,17 @@
 "use client"
 
 import { Layout } from "@/components/Layout"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+import { Database, Plus, RefreshCw, Shield, Link } from "lucide-react"
 
 export default function ConnectionsPage() {
   return (
@@ -17,7 +25,9 @@ export default function ConnectionsPage() {
               read-only and organization-scoped.
             </p>
           </div>
-          <Button>Add Connection</Button>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" /> Add Connection
+          </Button>
         </div>
 
         <Card>
@@ -26,8 +36,12 @@ export default function ConnectionsPage() {
           </CardHeader>
           <CardContent>
             <div className="rounded-lg border border-border p-6 text-center text-muted-foreground">
-              No connections registered. Use the connect_database MCP tool or
-              add one here to begin inspecting a target database.
+              <Database className="h-8 w-8 mb-2 opacity-50" />
+              <p>No connections registered.</p>
+              <p className="mt-2 text-xs">
+                Use the connect_database MCP tool or add one here to begin
+                inspecting a target database.
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -54,7 +68,9 @@ export default function ConnectionsPage() {
                 <label className="text-sm font-medium text-muted-foreground">
                   Database URL
                 </label>
-                <Input placeholder="postgresql+psycopg2://readonly@localhost:5432/ecommerce" />
+                <Input
+                  placeholder="postgresql+psycopg2://readonly@localhost:5432/ecommerce"
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground">
@@ -64,10 +80,16 @@ export default function ConnectionsPage() {
               </div>
             </div>
             <p className="text-xs text-muted-foreground">
-              Credentials are never stored or displayed in plaintext. Connections
-              use encrypted credentials at rest and read-only database roles.
+              Credentials are never stored or displayed in plaintext.
+              Connections use encrypted credentials at rest and read-only
+              database roles.
             </p>
-            <Button>Test &amp; Connect</Button>
+            <div className="flex items-center gap-2">
+              <Button onClick={() => {}}>
+                <RefreshCw className="h-4 w-4 mr-2" /> Test &amp; Connect
+              </Button>
+              <Button variant="outline">Cancel</Button>
+            </div>
           </CardContent>
         </Card>
       </div>

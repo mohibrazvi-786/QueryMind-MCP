@@ -1,7 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
+import { Layout } from "@/components/Layout"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
   LayoutDashboard,
   Database,
@@ -12,9 +23,11 @@ import {
   AlertTriangle,
   FileCheck,
   Shield,
-  Settings,
-  Menu,
   ChevronRight,
+  Plus,
+  Activity,
+  TrendingUp,
+  Clock,
 } from "lucide-react"
 
 const nav = [
@@ -29,15 +42,16 @@ const nav = [
   { name: "Organization", href: "/org", icon: Shield },
 ]
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   return (
     <div className="flex h-screen bg-background text-foreground">
       <aside
-        className={`hidden md:flex w-64 flex-col border-r border-border ${
+        className={cn(
+          "hidden md:flex w-64 flex-col border-r border-border",
           sidebarOpen ? "" : "translate-x-[-100%] transition-transform duration-300"
-        }`}
+        )}
       >
         <div className="p-4">
           <Link href="/" className="flex items-center gap-2 font-bold text-lg mb-6">
@@ -48,7 +62,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-primary"
+                className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-primary"
               >
                 <item.icon className="h-4 w-4" />
                 {item.name}
@@ -58,28 +72,41 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </nav>
         </div>
         <div className="p-4 mt-auto border-t border-border">
-          <Link href="/org" className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-muted">
-            <Settings className="h-4 w-4" /> Organization
+          <Link href="/org" className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-accent">
+            <Shield className="h-4 w-4" /> Organization
           </Link>
         </div>
       </aside>
 
-      <div className="flex-1 flex flex-col overflow-hidden md:pl-0">
-        <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/50">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/50 md:px-6">
           <button
             onClick={() => setSidebarOpen((o) => !o)}
             className="md:hidden p-2 text-muted-foreground hover:text-foreground"
           >
-            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle sidebar</span>
+            <Plus className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Connected</span>
-            <span className="h-2 w-2 rounded-full bg-green-500" aria-label="status" />
+            <span className="w-2 h-2 rounded-full bg-green-500" />
+            <span className="text-xs text-muted-foreground">Connected</span>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
       </div>
     </div>
   )
+)
+
+function Link({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) {
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  )
+}
+
+function cn(...classes: (string | undefined | false)[]) {
+  return classes.filter(Boolean).join(" ")
 }

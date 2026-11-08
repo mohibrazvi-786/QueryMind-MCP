@@ -1,7 +1,12 @@
 "use client"
 
 import { Layout } from "@/components/Layout"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default function PerformancePage() {
   return (
@@ -45,7 +50,7 @@ export default function PerformancePage() {
             <CardTitle>Inefficiency Rules</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
+            <ul className="text-sm text-muted-foreground space-y-3 list-disc pl-5">
               <li>SELECT * usage</li>
               <li>Missing LIMIT on exploratory queries</li>
               <li>Leading-wildcard LIKE patterns</li>

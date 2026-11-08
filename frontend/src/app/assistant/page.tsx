@@ -2,9 +2,15 @@
 
 import { useState } from "react"
 import { Layout } from "@/components/Layout"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Zap, Copy, Play, Database, Clock } from "lucide-react"
 
 export default function AssistantPage() {
   const [question, setQuestion] = useState("")
@@ -61,8 +67,18 @@ export default function AssistantPage() {
                 <Button
                   onClick={handleGenerate}
                   disabled={loading || !question.trim()}
+                  className="w-full"
                 >
-                  {loading ? "Generating..." : "Generate SQL"}
+                  {loading ? (
+                    <>
+                      <Clock className="h-4 w-4 mr-2 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="h-4 w-4 mr-2" /> Generate SQL
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -76,25 +92,36 @@ export default function AssistantPage() {
               <CardContent>
                 {sql ? (
                   <>
-                    <pre className="p-4 rounded-md bg-muted text-sm overflow-auto">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-medium text-muted-foreground">
+                        PostgreSQL
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          navigator.clipboard.writeText(sql)
+                        }}
+                      >
+                        <Copy className="h-3 w-3 mr-2" /> Copy
+                      </Button>
+                    </div>
+                    <pre className="p-4 rounded-md bg-muted text-sm overflow-auto font-mono">
                       <code>{sql}</code>
                     </pre>
                     <div className="mt-4 flex gap-2">
-                      <Button variant="outline" size="sm">
-                        Copy SQL
-                      </Button>
-                      <Button variant="secondary" size="sm" disabled>
-                        Execute Query
+                      <Button variant="outline" size="sm" disabled>
+                        <Play className="h-3 w-3 mr-2" /> Execute Query
                       </Button>
                     </div>
                     {answer && (
-                      <div className="mt-4 text-sm text-muted-foreground">
+                      <div className="mt-4 pt-4 border-t border-border text-sm text-muted-foreground">
                         {answer}
                       </div>
                     )}
                   </>
                 ) : (
-                  <div className="text-center py-10 text-muted-foreground text-sm">
+                  <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-border bg-background/50 text-muted-foreground text-sm">
                     Generate a query to see SQL, validation results, and
                     explanation here.
                   </div>

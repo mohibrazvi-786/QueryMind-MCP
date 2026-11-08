@@ -1,54 +1,54 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string
-}
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-xl border border-card-border bg-card text-card-foreground shadow-sm",
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
 
-export function Card({ className, ...props }: CardProps) {
-  return (
-    <div
-      className={cn(
-        "rounded-xl border border-border bg-card text-card-foreground shadow-sm",
-        className
-      )}
-      {...props}
-    />
-  )
-}
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
 
-export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string
-}
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-bold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
 
-export function CardHeader({ className, ...props }: CardHeaderProps) {
-  return (
-    <div className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-  )
-}
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
 
-export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  className?: string
-}
-
-export function CardTitle({ className, ...props }: CardTitleProps) {
-  return (
-    <h3
-      className={cn(
-        "text-2xl font-bold leading-none tracking-tight",
-        className
-      )}
-      {...props}
-    />
-  )
-}
-
-export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string
-}
-
-export function CardContent({ className, ...props }: CardContentProps) {
-  return (
-    <div className={cn("p-6 pt-0", className)} {...props} />
-  )
-}
+export { Card, CardHeader, CardTitle, CardContent }
