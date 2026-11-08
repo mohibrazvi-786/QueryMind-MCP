@@ -1,0 +1,41 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Alembic
+alembic/versions/*.py  # keep env.py and script.py.mako
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+test_reports/
+
+# Local dev
+*.log
+docker-compose.override.yml

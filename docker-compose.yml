@@ -1,0 +1,114 @@
+# QueryMind MCP — Docker Compose (local development)
+# Starts the backend, an internal PostgreSQL for application records, and
+# an optional target PostgreSQL for discovery. Do not expose DB ports publicly.
+
+services:
+  querymind-db:
+    image: postgres:17
+    container_name: querymind-internal-db
+    environment:
+      POSTGRES_DB: querymind
+      POSTGRES_USER: querymind
+      POSTGRES_PASSWORD_FILE: /run/secrets/querymind_db_password
+    secrets:
+      - querymind_db_password
+    volumes:
+      - querymind_internal_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U querymind -d querymind"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - querymind-net
+
+  querymind-target:
+    image: postgres:17
+    container_name: querymind-target-db
+    environment:
+      POSTGRES_DB: ecommerce
+      POSTGRES_USER: readonly
+      POSTGRES_PASSWORD_FILE: /run/secrets/target_db_password
+    secrets:
+      - target_db_password
+    # Target DB must NOT be exposed publicly.
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - querymind_target_data:/var/lib/postgresql/data
+      - ./scripts/seed_demo_data.py:/docker-entrypoint-initdb.d/seed_demo_data.py:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U readonly -d ecommerce"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - querymind-net
+
+  querymind-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: querymind-backend
+    depends_on:
+      querymind-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg2://querymind:querymind@querymind-db:5432/querymind
+      TARGET_DATABASE_URL: postgresql+psycopg2://readonly:readonly@querymind-target:5432/ecommerce
+      SECRET_FILE: /run/secrets/querymind_secret_key
+      ENCRYPTION_KEY_FILE: /run/secrets/querymind_encryption_key
+      JWT_SECRET_FILE: /run/secrets/querymind_jwt_secret
+      QUERYMIND_ENV: development
+      LOG_LEVEL: info
+      MCP_TRANSPORT: streamable-http
+      MAX_RESULT_ROWS: 1000
+      STATEMENT_TIMEOUT_MS: 10000
+    secrets:
+      - querymind_secret_key
+      - querymind_encryption_key
+      - querymind_jwt_secret
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - querymind-net
+
+  querymind-dashboard:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: querymind-dashboard
+    depends_on:
+      querymind-backend:
+        condition: service_healthy
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:8000
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - querymind-net
+
+secrets:
+  querymind_db_password:
+    file: ./secrets/querymind_db_password.txt
+  querymind_secret_key:
+    file: ./secrets/querymind_secret_key.txt
+  querymind_encryption_key:
+    file: ./secrets/querymind_encryption_key.txt
+  querymind_jwt_secret:
+    file: ./secrets/querymind_jwt_secret.txt
+  target_db_password:
+    file: ./secrets/target_db_password.txt
+
+volumes:
+  querymind_internal_data:
+  querymind_target_data:
+
+networks:
+  querymind-net:
+    driver: bridge

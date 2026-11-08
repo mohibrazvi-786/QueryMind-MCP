@@ -1,0 +1,50 @@
+[project]
+name = "querymind-mcp"
+version = "0.1.0"
+description = "AI-powered database intelligence, RAG and optimization platform (MCP)"
+requires-python = ">=3.12,<3.14"
+authors = [{ name = "QueryMind MCP" }]
+license = { text = "MIT" }
+readme = "README.md"
+dependencies = [
+    "fastapi==0.162.2",
+    "fastmcp==4.1.6",
+    "sqlalchemy==2.1.8",
+    "alembic==1.20.1",
+    "psycopg2-binary==2.9.13",
+    "sqlglot==30.30.0",
+    "pydantic==2.14.3",
+    "pydantic-settings==2.16.2",
+    "structlog==26.1.0",
+    "httpx==0.28.1",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest==8.4.2",
+    "pytest-asyncio==0.26.0",
+]
+dev = [
+    "ruff==0.11.5",
+    "mypy==1.17.1",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["querymind*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "Q", "S", "UP"]
+ignore = ["E501", "S107"]
